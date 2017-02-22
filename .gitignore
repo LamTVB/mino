@@ -1,1 +1,6 @@
 src/mino/language_mino/
+.classpath
+.idea/
+grammar/mino.sablecc3
+.project
+mino.iml
