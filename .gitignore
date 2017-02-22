@@ -4,3 +4,5 @@ src/mino/language_mino/
 grammar/mino.sablecc3
 .project
 mino.iml
+sablecc.jar
+
