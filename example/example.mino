@@ -37,6 +37,10 @@ class Object {
     return self;
   }
 
+  fun m(){
+    print("lala");
+  }
+
   primitive abort(String message);
 
   fun assert(Boolean cond, String message) {
@@ -127,6 +131,14 @@ class Person {
   fun getAge() : Integer{
     return _age;
   }
+
+  fun setAge(Integer age){
+    _age = age;
+  }
+
+  fun setName(String name){
+    _name = name;
+  }
 }
 
 Float a = 2.2;
@@ -151,10 +163,14 @@ if(first_person < second_person){
 }else{
     print(first_person.getName() + " est plus vieux que " + second_person.getName());
 }
+second_person.setAge(12);
+second_person.setName("Jacques");
+
+print(second_person);
 
 print("HELLO world.");
 print("test" + 21 + "test" + "test" + "test" + 21);
-print(21 + "test");
+print(21 + "test" + 21 + "test" + 21 + "test");
 
 print("1*156*2*0 = " + 1*156/2*0);
 print("4+2+1+2*3 = " + 2+1+2*3); /* 216 */
@@ -177,8 +193,8 @@ print("f = " + f);
 print("g = " + g);
 
 print(new Person.init("Joe",21));
-
-i = 0;
+Object o = new A;
+Integer i = 0;
 while(!(i == 2)) {
   if(i == 0) {
     o = new A;

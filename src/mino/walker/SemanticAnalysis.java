@@ -1,12 +1,10 @@
 package mino.walker;
 
 import mino.exception.InterpreterException;
-import mino.exception.ReturnException;
 import mino.exception.SemanticException;
 import mino.language_mino.*;
 import mino.structure.*;
 
-import java.math.BigInteger;
 import java.util.*;
 
 /**
@@ -147,9 +145,9 @@ public class SemanticAnalysis
 
             ClassInfo next = argsIterator.next();
 
-            if (!next.isa(this.classTable.get(variableInfo.getClassName()))) {
+            if (!next.isa(this.classTable.get(variableInfo.getExplicitType()))) {
                 throw new SemanticException("argument #" + i + " is not of "
-                        + variableInfo.getClassName().getText() + " type", location);
+                        + variableInfo.getExplicitType().getText() + " type", location);
             }
         }
 
@@ -330,7 +328,7 @@ public class SemanticAnalysis
             NTerm_Var node) {
 
         VariableInfo className = this.currentScope.getVariable(node.get_Id());
-        this.expType = this.classTable.get(className.getClassName());
+        this.expType = this.classTable.get(className.getExplicitType());
     }
 
     @Override
@@ -406,7 +404,7 @@ public class SemanticAnalysis
         if(left.isa(this.stringClassInfo) && !right.isa(this.stringClassInfo)){
             throw new SemanticException("Cannot compare String with something else", nEq);
         }else if((left.isa(this.integerClassInfo) || left.isa(this.floatClassInfo))
-                && (!right.isa(this.integerClassInfo) || right.isa(this.floatClassInfo))){
+                && (!right.isa(this.integerClassInfo) & !right.isa(this.floatClassInfo))){
             throw new SemanticException("Cannot compare Integer or Float with something else", nEq);
         }else if(left.isa(this.booleanClassInfo)){
             throw new SemanticException("Cannot compare boolean", nEq);
@@ -446,7 +444,7 @@ public class SemanticAnalysis
         if(left.isa(this.stringClassInfo) && !right.isa(this.stringClassInfo)){
             throw new SemanticException("Cannot compare String with something else", lte);
         }else if((left.isa(this.integerClassInfo) || left.isa(this.floatClassInfo))
-                && (!right.isa(this.integerClassInfo) || right.isa(this.floatClassInfo))){
+                && (!right.isa(this.integerClassInfo) && !right.isa(this.floatClassInfo))){
             throw new SemanticException("Cannot compare Integer or Float with something else", lte);
         }else if(left.isa(this.booleanClassInfo)){
             throw new SemanticException("Cannot compare boolean", lte);
@@ -466,7 +464,7 @@ public class SemanticAnalysis
         if(left.isa(this.stringClassInfo) && !right.isa(this.stringClassInfo)){
             throw new SemanticException("Cannot compare String with something else", gt);
         }else if((left.isa(this.integerClassInfo) || left.isa(this.floatClassInfo))
-                && (!right.isa(this.integerClassInfo) || right.isa(this.floatClassInfo))){
+                && (!right.isa(this.integerClassInfo) && !right.isa(this.floatClassInfo))){
             throw new SemanticException("Cannot compare Integer or Float with something else", gt);
         }else if(left.isa(this.booleanClassInfo)){
             throw new SemanticException("Cannot compare boolean", gt);
@@ -485,7 +483,7 @@ public class SemanticAnalysis
         if(left.isa(this.stringClassInfo) && !right.isa(this.stringClassInfo)){
             throw new SemanticException("Cannot compare String with something else", gte);
         }else if((left.isa(this.integerClassInfo) || left.isa(this.floatClassInfo))
-                && (!right.isa(this.integerClassInfo) || right.isa(this.floatClassInfo))){
+                && (!right.isa(this.integerClassInfo) && !right.isa(this.floatClassInfo))){
             throw new SemanticException("Cannot compare Integer or Float with something else", gte);
         }else if(left.isa(this.booleanClassInfo)){
             throw new SemanticException("Cannot compare boolean", gte);
@@ -514,14 +512,14 @@ public class SemanticAnalysis
             this.currentScope.addVariable(new VariableInfo(node.get_Id().getText(), explicitType, node.get_Id()));
         }else{
             VariableInfo leftInfo = this.currentScope.getVariable(node.get_Id());
-            left = this.classTable.get(leftInfo.getClassName());
+            left = this.classTable.get(leftInfo.getExplicitType());
         }
 
         if(left.isa(this.integerClassInfo) || left.isa(this.floatClassInfo)){
             if(!expType.isa(this.integerClassInfo) && !expType.isa(this.floatClassInfo)){
                 throw new SemanticException("Cannot assign a " + expType.getName() + " to " + node.get_Id(), node.get_Id());
             }
-        }else if(!left.isa(expType)){
+        }else if(!expType.isa(left)){
             throw new SemanticException("Cannot assign a " + expType.getName() + " to " + node.get_Id()
                     , node.get_Id());
         }
@@ -692,6 +690,8 @@ public class SemanticAnalysis
                 this.expType = this.integerClassInfo;
             }else if(right.isa(this.floatClassInfo)){
                 this.expType = this.floatClassInfo;
+            }else if(right.isa(this.stringClassInfo)){
+                this.expType = this.stringClassInfo;
             }
         }else{
             throw new SemanticException("Cannot add " + left.getName() + " with " + right.getName(), node.get_Plus());
