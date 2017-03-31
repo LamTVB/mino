@@ -151,7 +151,8 @@ public class MethodTable {
         return this.virtualTable;
     }
 
-    public void setVirtualTable(){
+    private void setVirtualTable(){
+
         this.virtualTable.putAll(this.classInfo.getSuperClassInfoOrNull().getMethodTable().getVirtualTable());
     }
 }

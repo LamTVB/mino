@@ -20,6 +20,8 @@ package mino.structure;
 import mino.exception.*;
 import mino.language_mino.*;
 
+import java.util.LinkedList;
+
 public class ClassInfo {
 
     private final ClassTable classTable;
@@ -31,6 +33,8 @@ public class ClassInfo {
     private final MethodTable methodTable = new MethodTable(this);
 
     private final FieldTable fieldTable = new FieldTable(this);
+
+    private final LinkedList<ClassInfo> subTypes = new LinkedList<>();
 
     ClassInfo(
             ClassTable classTable,
@@ -112,5 +116,17 @@ public class ClassInfo {
         }
 
         return false;
+    }
+
+    public void addSubTypes(ClassInfo classInfo){
+        if(this.superClass != null){
+            this.superClass.addSubTypes(classInfo);
+        }
+
+        this.subTypes.add(classInfo);
+    }
+
+    public LinkedList<ClassInfo> getSubTypes(){
+        return this.subTypes;
     }
 }

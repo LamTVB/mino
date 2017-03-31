@@ -103,7 +103,23 @@ public class ClassTable {
                 int i = 0;
                 for(Map.Entry<String, MethodInfo> method : virtualTables.entrySet()){
                     ++i;
-                    System.out.println(i + "- " + method.getValue().getClassInfo().getName() + "." + method.getKey());
+                    System.out.println(i + " - " + method.getValue().getClassInfo().getName() + "." + method.getKey());
+                }
+            }
+        }
+    }
+
+    public void printSubTypesTables(){
+
+        for(Map.Entry<String, ClassInfo> classInfo : nameToClassInfoMap.entrySet()){
+            LinkedList<ClassInfo> subTypes = classInfo.getValue().getSubTypes();
+
+            if(subTypes != null){
+                System.out.println("============== SubTypes Table for " + classInfo.getKey() + " ==============");
+                int i = 0;
+                for(ClassInfo subType : subTypes){
+                    ++i;
+                    System.out.println(i + " - " + subType.getName());
                 }
             }
         }
