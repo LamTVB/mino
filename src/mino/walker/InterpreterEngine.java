@@ -176,8 +176,15 @@ public class InterpreterEngine
     public void caseStm_VarAssign(
             NStm_VarAssign node) {
 
-        Instance value = getExpEval(node.get_Exp());
-        this.currentFrame.setVar(node.get_Id(), value);
+        NExp exp = null;
+
+        if(node.get_AssignOpt() instanceof NAssignOpt_One){
+            exp = ((NAssignOpt_One)node.get_AssignOpt()).get_Exp();
+            Instance value = getExpEval(exp);
+            this.currentFrame.setVar(node.get_Id(), value);
+        }else{
+            this.currentFrame.setVar(node.get_Id(), null);
+        }
     }
 
     @Override

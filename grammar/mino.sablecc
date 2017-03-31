@@ -108,7 +108,7 @@ Parser
     {mult:} [mult:] '*';
 
   stm =
-    {var_assign:} class_name_opt id '=' exp ';' |
+    {var_assign:} class_name_opt id assign_opt ';' |
     {field_assign:} field_name '=' exp ';' |
     {call:} call ';' |
     {self_call:} self_call ';' |
@@ -116,8 +116,12 @@ Parser
     {if:} 'if' [l_par:]'(' exp ')' '{' stms '}' else_opt |
     {return:} [return_kwd:]'return' exp_opt ';';
 
+  assign_opt =
+    {one:} '=' exp |
+    {zero:} ;
+
   class_name_opt =
-    {one:}class_name |
+    {one:} class_name |
     {zero:} ;
 
   exp_opt =
