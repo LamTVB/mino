@@ -28,6 +28,8 @@ public class MethodTable {
 
     private final Map<String, MethodInfo> nameToMethodInfoMap = new LinkedHashMap<String, MethodInfo>();
 
+    private final LinkedHashMap<String, MethodInfo> virtualTable = new LinkedHashMap<>();
+
     MethodTable(
             ClassInfo classInfo) {
 
@@ -133,5 +135,23 @@ public class MethodTable {
     public ClassInfo getClassInfo() {
 
         return this.classInfo;
+    }
+
+    public void addVirtual(
+            MethodInfo methodInfo){
+
+        if(this.virtualTable.size() == 0 && this.classInfo.getSuperClassInfoOrNull() != null){
+            this.setVirtualTable();
+        }
+        this.virtualTable.put(methodInfo.getName(), methodInfo);
+    }
+
+    public LinkedHashMap<String, MethodInfo> getVirtualTable(){
+
+        return this.virtualTable;
+    }
+
+    public void setVirtualTable(){
+        this.virtualTable.putAll(this.classInfo.getSuperClassInfoOrNull().getMethodTable().getVirtualTable());
     }
 }

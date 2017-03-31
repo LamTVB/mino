@@ -92,4 +92,20 @@ public class ClassTable {
     public ClassInfo getFloatClassInfoOrNull(){
         return this.nameToClassInfoMap.get("Float");
     }
+
+    public void printVirtualTables(){
+
+        for(Map.Entry<String, ClassInfo> classInfo : nameToClassInfoMap.entrySet()){
+            LinkedHashMap<String, MethodInfo> virtualTables = classInfo.getValue().getMethodTable().getVirtualTable();
+
+            if(virtualTables != null){
+                System.out.println("============== Virtual Table for " + classInfo.getKey() + " ==============");
+                int i = 0;
+                for(Map.Entry<String, MethodInfo> method : virtualTables.entrySet()){
+                    ++i;
+                    System.out.println(i + "- " + method.getValue().getClassInfo().getName() + "." + method.getKey());
+                }
+            }
+        }
+    }
 }

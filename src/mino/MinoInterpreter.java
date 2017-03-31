@@ -86,7 +86,8 @@ public class MinoInterpreter {
             ClassDefinitionFinder.find(syntaxTree, classTable);
             SemanticAnalysis.verify(syntaxTree, classTable);
             // interpret
-            interpreterEngine.visit(syntaxTree, classTable);
+            VirtualTablePrinter.print(syntaxTree, classTable);
+//            interpreterEngine.visit(syntaxTree, classTable);
         }
         catch (InterpreterException e) {
             System.out.flush();
