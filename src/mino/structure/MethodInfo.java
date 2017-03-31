@@ -31,12 +31,12 @@ public abstract class MethodInfo {
 
     private final LinkedList<String> paramNames = new LinkedList<String>();
 
-    private final NClassName returnParam;
+    private final ClassInfo returnParam;
 
     MethodInfo(
             MethodTable methodTable,
             LinkedList<VariableInfo> params,
-            NClassName returnParam) {
+            ClassInfo returnParam) {
 
         this.methodTable = methodTable;
         this.returnParam = returnParam;
@@ -71,9 +71,6 @@ public abstract class MethodInfo {
     public abstract void execute(
             InterpreterEngine interpreterEngine);
 
-    public abstract void analyse(
-            SemanticAnalysis semanticAnalysis);
-
     public ClassInfo getClassInfo() {
 
         return this.methodTable.getClassInfo();
@@ -84,7 +81,7 @@ public abstract class MethodInfo {
         return this.params;
     }
 
-    public NClassName getClassReturnParam(){
+    public ClassInfo getClassReturnParam(){
 
         return this.returnParam;
     }

@@ -95,10 +95,11 @@ public class ClassDefinitionFinder
 
         LinkedList<VariableInfo> params = getParams(node.get_IdListOpt());
 
-        NClassName returnParam = null;
+        ClassInfo returnParam = null;
 
         if(node.get_ReturnOpt() instanceof NReturnOpt_One){
-            returnParam = ((NReturnOpt_One)node.get_ReturnOpt()).get_ClassName();
+            NClassName returnClassName = ((NReturnOpt_One)node.get_ReturnOpt()).get_ClassName();
+            returnParam = this.classTable.get(returnClassName);
         }
         this.currentClassInfo.getMethodTable().add(node, params, returnParam);
     }
@@ -109,10 +110,11 @@ public class ClassDefinitionFinder
 
         LinkedList<VariableInfo> params = getParams(node.get_IdListOpt());
         Token operatorToken = getOperatorToken(node.get_Operator());
-        NClassName returnParam = null;
+        ClassInfo returnParam = null;
 
         if(node.get_ReturnOpt() instanceof NReturnOpt_One){
-            returnParam = ((NReturnOpt_One)node.get_ReturnOpt()).get_ClassName();
+            NClassName returnClassName = ((NReturnOpt_One)node.get_ReturnOpt()).get_ClassName();
+            returnParam = this.classTable.get(returnClassName);
         }
         this.currentClassInfo.getMethodTable().add(node, params, returnParam, operatorToken);
     }
@@ -122,10 +124,11 @@ public class ClassDefinitionFinder
             NMember_PrimitiveMethod node) {
 
         LinkedList<VariableInfo> params = getParams(node.get_IdListOpt());
-        NClassName returnParam = null;
+        ClassInfo returnParam = null;
 
         if(node.get_ReturnOpt() instanceof NReturnOpt_One){
-            returnParam = ((NReturnOpt_One)node.get_ReturnOpt()).get_ClassName();
+            NClassName returnClassName = ((NReturnOpt_One)node.get_ReturnOpt()).get_ClassName();
+            returnParam = this.classTable.get(returnClassName);
         }
         this.currentClassInfo.getMethodTable().add(node, params, returnParam);
     }
@@ -136,10 +139,11 @@ public class ClassDefinitionFinder
 
         LinkedList<VariableInfo> params = getParams(node.get_IdListOpt());
         Token operatorToken = getOperatorToken(node.get_Operator());
-        NClassName returnParam = null;
+        ClassInfo returnParam = null;
 
         if(node.get_ReturnOpt() instanceof NReturnOpt_One){
-            returnParam = ((NReturnOpt_One)node.get_ReturnOpt()).get_ClassName();
+            NClassName returnClassName = ((NReturnOpt_One)node.get_ReturnOpt()).get_ClassName();
+            returnParam = this.classTable.get(returnClassName);
         }
         this.currentClassInfo.getMethodTable().add(node, params, returnParam, operatorToken);
     }

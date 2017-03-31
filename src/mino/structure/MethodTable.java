@@ -37,7 +37,7 @@ public class MethodTable {
     public void add(
             NMember_Method definition,
             LinkedList<VariableInfo> params,
-            NClassName returnParam) {
+            ClassInfo returnParam) {
 
         Token nameToken = definition.get_Id();
         String name = nameToken.getText();
@@ -54,7 +54,7 @@ public class MethodTable {
     public void add(
             NMember_Operator definition,
             LinkedList<VariableInfo> params,
-            NClassName returnParam,
+            ClassInfo returnParam,
             Token operatorToken) {
 
         String name = operatorToken.getText();
@@ -71,7 +71,7 @@ public class MethodTable {
     public void add(
             NMember_PrimitiveMethod definition,
             LinkedList<VariableInfo> params,
-            NClassName returnParam) {
+            ClassInfo returnParam) {
 
         Token nameToken = definition.get_Id();
         String name = nameToken.getText();
@@ -88,7 +88,7 @@ public class MethodTable {
     public void add(
             NMember_PrimitiveOperator definition,
             LinkedList<VariableInfo> params,
-            NClassName returnParam,
+            ClassInfo returnParam,
             Token operatorToken) {
 
         String name = operatorToken.getText();

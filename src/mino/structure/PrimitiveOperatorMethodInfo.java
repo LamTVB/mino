@@ -49,7 +49,7 @@ public class PrimitiveOperatorMethodInfo
             MethodTable methodTable,
             NMember_PrimitiveOperator definition,
             LinkedList<VariableInfo> params,
-            NClassName returnParam,
+            ClassInfo returnParam,
             Token operatorToken) {
 
         super(methodTable, params, returnParam);
@@ -203,11 +203,5 @@ public class PrimitiveOperatorMethodInfo
             default:
                 throw new RuntimeException("unhandled case");
         }
-    }
-
-    @Override
-    public void analyse(
-            SemanticAnalysis semanticAnalysis) {
-
     }
 }

@@ -193,7 +193,7 @@ print("f = " + f);
 print("g = " + g);
 
 print(new Person.init("Joe",21));
-Object o = new A;
+Object o;
 Integer i = 0;
 while(!(i == 2)) {
   if(i == 0) {

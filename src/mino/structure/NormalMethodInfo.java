@@ -31,7 +31,7 @@ public class NormalMethodInfo
             MethodTable methodTable,
             NMember_Method definition,
             LinkedList<VariableInfo> params,
-            NClassName returnParam) {
+            ClassInfo returnParam) {
 
         super(methodTable, params, returnParam);
         this.definition = definition;
@@ -48,12 +48,5 @@ public class NormalMethodInfo
             InterpreterEngine interpreterEngine) {
 
         interpreterEngine.visit(this.definition.get_Stms());
-    }
-
-    @Override
-    public void analyse(
-            SemanticAnalysis semanticAnalysis) {
-
-        semanticAnalysis.visit(this.definition.get_Stms());
     }
 }

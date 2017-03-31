@@ -504,7 +504,7 @@ public class SemanticAnalysis
             NStm_VarAssign node) {
 
         ClassInfo left;
-        ClassInfo expType = getExpType(node.get_Exp());
+        ClassInfo expType = null;
 
         if(node.get_ClassNameOpt() instanceof  NClassNameOpt_One){
             NClassName explicitType = ((NClassNameOpt_One)node.get_ClassNameOpt()).get_ClassName();
@@ -513,6 +513,15 @@ public class SemanticAnalysis
         }else{
             VariableInfo leftInfo = this.currentScope.getVariable(node.get_Id());
             left = leftInfo.getExplicitType();
+        }
+
+        if(node.get_AssignOpt() instanceof NAssignOpt_One){
+            NExp exp = ((NAssignOpt_One)node.get_AssignOpt()).get_Exp();
+            expType = getExpType(exp);
+        }
+
+        if(expType == null){
+            return;
         }
 
         if(left.isa(this.integerClassInfo) || left.isa(this.floatClassInfo)){
@@ -620,7 +629,7 @@ public class SemanticAnalysis
         verifyParameters(argsList, invokedMethod.getParams(), node.get_Id());
 
         if(invokedMethod.getClassReturnParam() != null){
-            this.expType = this.classTable.get(invokedMethod.getClassReturnParam());
+            this.expType = invokedMethod.getClassInfo();
         }else{
             this.expType = receiver;
         }
@@ -814,7 +823,7 @@ public class SemanticAnalysis
             if(methodInfo.getClassReturnParam() == null){
                 throw new SemanticException("Return not necessary", node.get_ReturnKwd());
             }
-            ClassInfo methodReturnClassInfo = this.classTable.get(methodInfo.getClassReturnParam());
+            ClassInfo methodReturnClassInfo = methodInfo.getClassReturnParam();
             ClassInfo expType = getExpType(exp);
 
             if(!methodReturnClassInfo.isa(expType)){

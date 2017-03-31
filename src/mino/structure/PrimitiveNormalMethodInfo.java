@@ -41,7 +41,7 @@ public class PrimitiveNormalMethodInfo
             MethodTable methodTable,
             NMember_PrimitiveMethod definition,
             LinkedList<VariableInfo> params,
-            NClassName returnParam) {
+            ClassInfo returnParam) {
 
         super(methodTable, params, returnParam);
         this.definition = definition;
@@ -110,11 +110,5 @@ public class PrimitiveNormalMethodInfo
         default:
             throw new RuntimeException("unhandled case");
         }
-    }
-
-    @Override
-    public void analyse(
-            SemanticAnalysis semanticAnalysis) {
-
     }
 }
