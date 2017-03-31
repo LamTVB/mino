@@ -43,41 +43,41 @@ public class OperatorMethodInfo
 
         if (getName().equals("+")) {
             if (getParamCount() != 1) {
-                throw new InterpreterException(
+                throw new SemanticException(
                         "method + must have a single parameter", operatorToken);
             }
         }
         else if (getName().equals("==")) {
             if (getParamCount() != 1) {
-                throw new InterpreterException(
+                throw new SemanticException(
                         "method == must have a single parameter", operatorToken);
             }
         }else if(getName().equals("!=")){
             if (getParamCount() != 1) {
-                throw new InterpreterException(
+                throw new SemanticException(
                         "method != must have a single parameter", operatorToken);
             }
         }else if(getName().equals("<")){
             if (getParamCount() != 1) {
-                throw new InterpreterException(
+                throw new SemanticException(
                         "method < must have a single parameter", operatorToken);
             }
         }
         else if(getName().equals("<=")){
             if (getParamCount() != 1) {
-                throw new InterpreterException(
+                throw new SemanticException(
                         "method <= must have a single parameter", operatorToken);
             }
         }
         else if(getName().equals(">")){
             if (getParamCount() != 1) {
-                throw new InterpreterException(
+                throw new SemanticException(
                         "method > must have a single parameter", operatorToken);
             }
         }
         else if(getName().equals(">=")){
             if (getParamCount() != 1) {
-                throw new InterpreterException(
+                throw new SemanticException(
                         "method >= must have a single parameter", operatorToken);
             }
         }

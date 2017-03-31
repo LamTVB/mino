@@ -831,8 +831,8 @@ public class InterpreterEngine
         Instance arg = this.currentFrame.getParameterValueWithoutId(argInfo);
 
         //If not an integer nor a string
-        if (!arg.isa(this.stringClassInfo)) {
-            throw new InterpreterException("right argument is not String",
+        if (!arg.isa(this.stringClassInfo) && !arg.isa(this.integerClassInfo) && !arg.isa(this.floatClassInfo)) {
+            throw new InterpreterException("right argument is not String neither Integer",
                     this.currentFrame.getPreviousFrame().getCurrentLocation());
         }
 
