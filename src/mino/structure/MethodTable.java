@@ -36,7 +36,8 @@ public class MethodTable {
 
     public void add(
             NMember_Method definition,
-            List<NId> params) {
+            Map<NId, NClassName> params,
+            NClassName returnParam) {
 
         Token nameToken = definition.get_Id();
         String name = nameToken.getText();
@@ -47,12 +48,13 @@ public class MethodTable {
         }
 
         this.nameToMethodInfoMap.put(name, new NormalMethodInfo(this,
-                definition, params));
+                definition, params, returnParam));
     }
 
     public void add(
             NMember_Operator definition,
-            List<NId> params,
+            Map<NId, NClassName> params,
+            NClassName returnParam,
             Token operatorToken) {
 
         String name = operatorToken.getText();
@@ -63,12 +65,13 @@ public class MethodTable {
         }
 
         this.nameToMethodInfoMap.put(name, new OperatorMethodInfo(this,
-                definition, params, operatorToken));
+                definition, params, returnParam, operatorToken));
     }
 
     public void add(
             NMember_PrimitiveMethod definition,
-            List<NId> params) {
+            Map<NId, NClassName> params,
+            NClassName returnParam) {
 
         Token nameToken = definition.get_Id();
         String name = nameToken.getText();
@@ -79,12 +82,13 @@ public class MethodTable {
         }
 
         this.nameToMethodInfoMap.put(name, new PrimitiveNormalMethodInfo(this,
-                definition, params));
+                definition, params, returnParam));
     }
 
     public void add(
             NMember_PrimitiveOperator definition,
-            List<NId> params,
+            Map<NId, NClassName> params,
+            NClassName returnParam,
             Token operatorToken) {
 
         String name = operatorToken.getText();
@@ -95,7 +99,7 @@ public class MethodTable {
         }
 
         this.nameToMethodInfoMap.put(name, new PrimitiveOperatorMethodInfo(
-                this, definition, params, operatorToken));
+                this, definition, params, returnParam, operatorToken));
     }
 
     private MethodInfo getMethodInfoOrNull(

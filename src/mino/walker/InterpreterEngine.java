@@ -27,11 +27,9 @@ import mino.structure.*;
 public class InterpreterEngine
         extends Walker {
 
-    private final ClassTable classTable = new ClassTable();
+    private ClassTable classTable;
 
     private ClassInfo currentClassInfo;
-
-    private List<NId> idList;
 
     private Token operatorToken;
 
@@ -52,10 +50,19 @@ public class InterpreterEngine
     private FloatClassInfo floatClassInfo;
 
     public void visit(
-            Node node) {
+            Node node,
+            ClassTable classTable) {
 
+        this.classTable = classTable;
         node.apply(this);
     }
+
+    public void visit(
+            Node tree){
+
+        tree.apply(this);
+    }
+
 
     public void printStackTrace() {
 
@@ -79,25 +86,6 @@ public class InterpreterEngine
 
             frame = frame.getPreviousFrame();
         }
-    }
-
-    private List<NId> getParams(
-            NIdListOpt node) {
-
-        this.idList = new LinkedList<NId>();
-        visit(node);
-        List<NId> idList = this.idList;
-        this.idList = null;
-        return idList;
-    }
-
-    private Token getOperatorToken(
-            NOperator node) {
-
-        visit(node);
-        Token operatorToken = this.operatorToken;
-        this.operatorToken = null;
-        return operatorToken;
     }
 
     private Instance getExpEval(
@@ -141,9 +129,6 @@ public class InterpreterEngine
     public void caseFile(
             NFile node) {
 
-        // collect class, field and method definitions
-        visit(node.get_Classdefs());
-
         // handle compiler-known classes
         this.objectClassInfo = this.classTable.getObjectClassInfoOrNull();
         if (this.objectClassInfo == null) {
@@ -185,144 +170,6 @@ public class InterpreterEngine
 
         // execute statements
         visit(node.get_Stms());
-    }
-
-    @Override
-    public void inClassdef(
-            NClassdef node) {
-
-        this.currentClassInfo = this.classTable.add(node);
-    }
-
-    @Override
-    public void outClassdef(
-            NClassdef node) {
-
-        this.currentClassInfo = null;
-    }
-
-    @Override
-    public void caseMember_Field(
-            NMember_Field node) {
-
-        this.currentClassInfo.getFieldTable().add(node);
-    }
-
-    @Override
-    public void caseMember_Method(
-            NMember_Method node) {
-
-        List<NId> params = getParams(node.get_IdListOpt());
-        this.currentClassInfo.getMethodTable().add(node, params);
-    }
-
-    @Override
-    public void caseMember_Operator(
-            NMember_Operator node) {
-
-        List<NId> params = getParams(node.get_IdListOpt());
-        Token operatorToken = getOperatorToken(node.get_Operator());
-        this.currentClassInfo.getMethodTable().add(node, params, operatorToken);
-    }
-
-    @Override
-    public void caseMember_PrimitiveMethod(
-            NMember_PrimitiveMethod node) {
-
-        List<NId> params = getParams(node.get_IdListOpt());
-        this.currentClassInfo.getMethodTable().add(node, params);
-    }
-
-    @Override
-    public void caseMember_PrimitiveOperator(
-            NMember_PrimitiveOperator node) {
-
-        List<NId> params = getParams(node.get_IdListOpt());
-        Token operatorToken = getOperatorToken(node.get_Operator());
-        this.currentClassInfo.getMethodTable().add(node, params, operatorToken);
-    }
-
-    @Override
-    public void inIdList(
-            NIdList node) {
-
-        this.idList.add(node.get_Id());
-    }
-
-    @Override
-    public void caseAdditionalId(
-            NAdditionalId node) {
-
-        this.idList.add(node.get_Id());
-    }
-
-    @Override
-    public void caseOperator_Plus(
-            NOperator_Plus node) {
-
-        this.operatorToken = node.get_Plus();
-    }
-
-    @Override
-    public void caseOperator_Min(
-            NOperator_Min node) {
-        this.operatorToken = node.get_Min();
-    }
-
-    @Override
-    public void caseOperator_Div(
-            NOperator_Div node) {
-        this.operatorToken = node.get_Div();
-    }
-
-    @Override
-    public void caseOperator_Modul(
-            NOperator_Modul node) {
-        this.operatorToken = node.get_Modul();
-    }
-
-    @Override
-    public void caseOperator_Mult(
-            NOperator_Mult node) {
-        this.operatorToken = node.get_Mult();
-    }
-
-    @Override
-    public void caseOperator_Eq(
-            NOperator_Eq node) {
-
-        this.operatorToken = node.get_Eq();
-    }
-
-    @Override
-    public void caseOperator_NotEq(
-            NOperator_NotEq node) {
-
-        this.operatorToken = node.get_NotEq();
-    }
-
-    @Override
-    public void caseOperator_GreaterThanEqual(
-            NOperator_GreaterThanEqual node) {
-        this.operatorToken = node.get_Gte();
-    }
-
-    @Override
-    public void caseOperator_GreaterThan(
-            NOperator_GreaterThan node) {
-        this.operatorToken = node.get_Gt();
-    }
-
-    @Override
-    public void caseOperator_LowerThan(
-            NOperator_LowerThan node) {
-        this.operatorToken = node.get_Lt();
-    }
-
-    @Override
-    public void caseOperator_LowerThanEqual(
-            NOperator_LowerThanEqual node) {
-        this.operatorToken = node.get_Lte();
     }
 
     @Override
@@ -502,9 +349,9 @@ public class InterpreterEngine
             Float rightValue;
 
             if(left.isa(this.integerClassInfo)){
-                leftValue = ((IntegerInstance)right).getValue().floatValue();
+                leftValue = ((IntegerInstance)left).getValue().floatValue();
             }else{
-                leftValue = ((FloatInstance)right).getValue();
+                leftValue = ((FloatInstance)left).getValue();
             }
 
             if(right.isa(this.integerClassInfo)){
@@ -548,9 +395,9 @@ public class InterpreterEngine
             Float rightValue;
 
             if(left.isa(this.integerClassInfo)){
-                leftValue = ((IntegerInstance)right).getValue().floatValue();
+                leftValue = ((IntegerInstance)left).getValue().floatValue();
             }else{
-                leftValue = ((FloatInstance)right).getValue();
+                leftValue = ((FloatInstance)left).getValue();
             }
 
             if(right.isa(this.integerClassInfo)){
@@ -595,9 +442,9 @@ public class InterpreterEngine
             Float rightValue;
 
             if(left.isa(this.integerClassInfo)){
-                leftValue = ((IntegerInstance)right).getValue().floatValue();
+                leftValue = ((IntegerInstance)left).getValue().floatValue();
             }else{
-                leftValue = ((FloatInstance)right).getValue();
+                leftValue = ((FloatInstance)left).getValue();
             }
 
             if(right.isa(this.integerClassInfo)){
@@ -642,9 +489,9 @@ public class InterpreterEngine
             Float rightValue;
 
             if(left.isa(this.integerClassInfo)){
-                leftValue = ((IntegerInstance)right).getValue().floatValue();
+                leftValue = ((IntegerInstance)left).getValue().floatValue();
             }else{
-                leftValue = ((FloatInstance)right).getValue();
+                leftValue = ((FloatInstance)left).getValue();
             }
 
             if(right.isa(this.integerClassInfo)){

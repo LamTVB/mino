@@ -40,9 +40,10 @@ public class PrimitiveNormalMethodInfo
     PrimitiveNormalMethodInfo(
             MethodTable methodTable,
             NMember_PrimitiveMethod definition,
-            List<NId> params) {
+            Map<NId, NClassName> params,
+            NClassName returnParam) {
 
-        super(methodTable, params);
+        super(methodTable, params, returnParam);
         this.definition = definition;
 
         String className = methodTable.getClassInfo().getName();
@@ -109,5 +110,11 @@ public class PrimitiveNormalMethodInfo
         default:
             throw new RuntimeException("unhandled case");
         }
+    }
+
+    @Override
+    public void analyse(
+            SemanticAnalysis semanticAnalysis) {
+
     }
 }

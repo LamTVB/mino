@@ -21,6 +21,7 @@ import java.io.*;
 
 import mino.exception.*;
 import mino.language_mino.*;
+import mino.structure.ClassTable;
 import mino.walker.*;
 
 public class MinoInterpreter {
@@ -78,7 +79,11 @@ public class MinoInterpreter {
         }
 
         InterpreterEngine interpreterEngine = new InterpreterEngine();
+        ClassTable classTable = new ClassTable();
+
         try {
+            ClassFinder.find(syntaxTree, classTable);
+            SemanticAnalysis.verify(syntaxTree, classTable);
             // interpret
             interpreterEngine.visit(syntaxTree);
         }

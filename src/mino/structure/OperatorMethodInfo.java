@@ -33,10 +33,11 @@ public class OperatorMethodInfo
     OperatorMethodInfo(
             MethodTable methodTable,
             NMember_Operator definition,
-            List<NId> params,
+            Map<NId, NClassName> params,
+            NClassName returnParam,
             Token operatorToken) {
 
-        super(methodTable, params);
+        super(methodTable, params, returnParam);
         this.definition = definition;
         this.operatorToken = operatorToken;
 
@@ -97,5 +98,12 @@ public class OperatorMethodInfo
             InterpreterEngine interpreterEngine) {
 
         interpreterEngine.visit(this.definition.get_Stms());
+    }
+
+    @Override
+    public void analyse(
+            SemanticAnalysis semanticAnalysis) {
+
+        semanticAnalysis.visit(this.definition.get_Stms());
     }
 }

@@ -48,10 +48,11 @@ public class PrimitiveOperatorMethodInfo
     PrimitiveOperatorMethodInfo(
             MethodTable methodTable,
             NMember_PrimitiveOperator definition,
-            List<NId> params,
+            Map<NId, NClassName> params,
+            NClassName returnParam,
             Token operatorToken) {
 
-        super(methodTable, params);
+        super(methodTable, params, returnParam);
         this.definition = definition;
         this.operatorToken = operatorToken;
 
@@ -202,5 +203,11 @@ public class PrimitiveOperatorMethodInfo
             default:
                 throw new RuntimeException("unhandled case");
         }
+    }
+
+    @Override
+    public void analyse(
+            SemanticAnalysis semanticAnalysis) {
+
     }
 }
