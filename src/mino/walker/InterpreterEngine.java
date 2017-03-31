@@ -131,36 +131,15 @@ public class InterpreterEngine
 
         // handle compiler-known classes
         this.objectClassInfo = this.classTable.getObjectClassInfoOrNull();
-        if (this.objectClassInfo == null) {
-            throw new InterpreterException("class Object is not defined", null);
-        }
-
         this.booleanClassInfo = (BooleanClassInfo) this.classTable
                 .getBooleanClassInfoOrNull();
-        if (this.booleanClassInfo == null) {
-            throw new InterpreterException("class Boolean was not defined",
-                    null);
-        }
 
         this.integerClassInfo = (IntegerClassInfo) this.classTable
                 .getIntegerClassInfoOrNull();
-        if (this.integerClassInfo == null) {
-            throw new InterpreterException("class Integer was not defined",
-                    null);
-        }
-
         this.stringClassInfo = (StringClassInfo) this.classTable
                 .getStringClassInfoOrNull();
-        if (this.stringClassInfo == null) {
-            throw new InterpreterException("class String was not defined", null);
-        }
-
         this.floatClassInfo =(FloatClassInfo) this.classTable
                 .getFloatClassInfoOrNull();
-
-        if(this.floatClassInfo == null){
-            throw new InterpreterException("class Float was not defined", null);
-        }
 
         // create initial Object instance
         Instance instance = this.objectClassInfo.newInstance();
@@ -207,11 +186,6 @@ public class InterpreterEngine
                         node.get_LPar());
             }
 
-            if (!value.isa(this.booleanClassInfo)) {
-                throw new InterpreterException("expression is not boolean",
-                        node.get_LPar());
-            }
-
             if (value == this.booleanClassInfo.getFalse()) {
                 break;
             }
@@ -226,15 +200,6 @@ public class InterpreterEngine
             NStm_If node) {
 
         Instance value = getExpEval(node.get_Exp());
-        if (value == null) {
-            throw new InterpreterException("expression is null",
-                    node.get_LPar());
-        }
-
-        if (!value.isa(this.booleanClassInfo)) {
-            throw new InterpreterException("expression is not boolean",
-                    node.get_LPar());
-        }
 
         if (value == this.booleanClassInfo.getTrue()) {
             // execute then statements
@@ -248,12 +213,6 @@ public class InterpreterEngine
     @Override
     public void caseStm_Return(
             NStm_Return node) {
-
-        if (this.currentFrame.getInvokedMethod() == null) {
-            throw new InterpreterException(
-                    "return statement is not allowed in main program",
-                    node.get_ReturnKwd());
-        }
 
         if (node.get_ExpOpt() instanceof NExpOpt_One) {
             NExp exp = ((NExpOpt_One) node.get_ExpOpt()).get_Exp();
@@ -780,12 +739,6 @@ public class InterpreterEngine
         MethodInfo invokedMethod = receiver.getClassInfo().getMethodTable()
                 .getMethodInfo(node.get_Id());
 
-        if (invokedMethod.getParamCount() != expList.size()) {
-            throw new InterpreterException("method " + invokedMethod.getName()
-                    + " expects " + invokedMethod.getParamCount()
-                    + " arguments", node.get_Id());
-        }
-
         Frame frame = new Frame(this.currentFrame, receiver, invokedMethod);
 
         for (NExp exp : expList) {
@@ -867,17 +820,9 @@ public class InterpreterEngine
     public void objectAbort(
             MethodInfo methodInfo) {
 
-        String argName = methodInfo.getParamName(0);
-        Instance arg = this.currentFrame.getParameterValueWithoutId(argName);
-        if (arg == null) {
-            throw new InterpreterException("abort argument is null",
-                    this.currentFrame.getPreviousFrame().getCurrentLocation());
-        }
-        if (!arg.isa(this.stringClassInfo)) {
-            throw new InterpreterException("abort argument is not String",
-                    this.currentFrame.getPreviousFrame().getCurrentLocation());
-        }
+        VariableInfo argInfo = methodInfo.getParamInfo(0);
 
+        Instance arg = this.currentFrame.getParameterValueWithoutId(argInfo.getName());
         String message = "ABORT: " + ((StringInstance) arg).getValue();
         throw new InterpreterException(message, this.currentFrame
                 .getPreviousFrame().getCurrentLocation());

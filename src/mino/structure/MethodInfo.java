@@ -63,6 +63,12 @@ public abstract class MethodInfo {
         return this.paramNames.get(i);
     }
 
+    public VariableInfo getParamInfo(
+            int i){
+
+        return this.params.get(i);
+    }
+
     public int getParamCount() {
 
         return this.paramNames.size();
