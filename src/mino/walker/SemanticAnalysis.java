@@ -386,11 +386,10 @@ public class SemanticAnalysis
         }else if((left.isa(this.integerClassInfo) || left.isa(this.floatClassInfo))
                 && (!right.isa(this.integerClassInfo) || right.isa(this.floatClassInfo))){
             throw new SemanticException("Cannot compare Integer or Float with something else", eq);
-        }else if(left.isa(this.booleanClassInfo)){
-            throw new SemanticException("Cannot compare boolean", eq);
         }else{
             this.expType = this.booleanClassInfo;
         }
+
     }
 
     @Override
@@ -406,8 +405,6 @@ public class SemanticAnalysis
         }else if((left.isa(this.integerClassInfo) || left.isa(this.floatClassInfo))
                 && (!right.isa(this.integerClassInfo) & !right.isa(this.floatClassInfo))){
             throw new SemanticException("Cannot compare Integer or Float with something else", nEq);
-        }else if(left.isa(this.booleanClassInfo)){
-            throw new SemanticException("Cannot compare boolean", nEq);
         }else{
             this.expType = this.booleanClassInfo;
         }
@@ -421,16 +418,7 @@ public class SemanticAnalysis
         ClassInfo right = getExpType(node.get_AddExp());
         Token lt = node.get_Lt();
 
-        if(left.isa(this.stringClassInfo) && !right.isa(this.stringClassInfo)){
-            throw new SemanticException("Cannot compare String with something else", lt);
-        }else if((left.isa(this.integerClassInfo) || left.isa(this.floatClassInfo))
-                && (!right.isa(this.integerClassInfo) && !right.isa(this.floatClassInfo))){
-            throw new SemanticException("Cannot compare Integer or Float with something else", lt);
-        }else if(left.isa(this.booleanClassInfo)){
-            throw new SemanticException("Cannot compare boolean", lt);
-        }else{
-            this.expType = this.booleanClassInfo;
-        }
+        booleanComparator(left, right, lt);
     }
 
     @Override
@@ -441,16 +429,7 @@ public class SemanticAnalysis
         ClassInfo right = getExpType(node.get_AddExp());
         Token lte = node.get_Lte();
 
-        if(left.isa(this.stringClassInfo) && !right.isa(this.stringClassInfo)){
-            throw new SemanticException("Cannot compare String with something else", lte);
-        }else if((left.isa(this.integerClassInfo) || left.isa(this.floatClassInfo))
-                && (!right.isa(this.integerClassInfo) && !right.isa(this.floatClassInfo))){
-            throw new SemanticException("Cannot compare Integer or Float with something else", lte);
-        }else if(left.isa(this.booleanClassInfo)){
-            throw new SemanticException("Cannot compare boolean", lte);
-        }else{
-            this.expType = this.booleanClassInfo;
-        }
+        booleanComparator(left, right, lte);
     }
 
     @Override
@@ -461,16 +440,7 @@ public class SemanticAnalysis
         ClassInfo right = getExpType(node.get_AddExp());
         Token gt = node.get_Gt();
 
-        if(left.isa(this.stringClassInfo) && !right.isa(this.stringClassInfo)){
-            throw new SemanticException("Cannot compare String with something else", gt);
-        }else if((left.isa(this.integerClassInfo) || left.isa(this.floatClassInfo))
-                && (!right.isa(this.integerClassInfo) && !right.isa(this.floatClassInfo))){
-            throw new SemanticException("Cannot compare Integer or Float with something else", gt);
-        }else if(left.isa(this.booleanClassInfo)){
-            throw new SemanticException("Cannot compare boolean", gt);
-        }else{
-            this.expType = this.booleanClassInfo;
-        }
+        booleanComparator(left, right, gt);
     }
 
     @Override
@@ -480,13 +450,21 @@ public class SemanticAnalysis
         ClassInfo right = getExpType(node.get_AddExp());
         Token gte = node.get_Gte();
 
+        booleanComparator(left, right, gte);
+    }
+
+    private void booleanComparator(
+            ClassInfo left,
+            ClassInfo right,
+            Token node){
+
         if(left.isa(this.stringClassInfo) && !right.isa(this.stringClassInfo)){
-            throw new SemanticException("Cannot compare String with something else", gte);
+            throw new SemanticException("Cannot compare String with something else", node);
         }else if((left.isa(this.integerClassInfo) || left.isa(this.floatClassInfo))
                 && (!right.isa(this.integerClassInfo) && !right.isa(this.floatClassInfo))){
-            throw new SemanticException("Cannot compare Integer or Float with something else", gte);
+            throw new SemanticException("Cannot compare Integer or Float with something else", node);
         }else if(left.isa(this.booleanClassInfo)){
-            throw new SemanticException("Cannot compare boolean", gte);
+            throw new SemanticException("Cannot compare boolean", node);
         }else{
             this.expType = this.booleanClassInfo;
         }
@@ -629,7 +607,7 @@ public class SemanticAnalysis
         verifyParameters(argsList, invokedMethod.getParams(), node.get_Id());
 
         if(invokedMethod.getClassReturnParam() != null){
-            this.expType = invokedMethod.getClassInfo();
+            this.expType = invokedMethod.getClassReturnParam();
         }else{
             this.expType = receiver;
         }
