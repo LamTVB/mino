@@ -35,7 +35,7 @@ public abstract class MethodInfo {
 
     MethodInfo(
             MethodTable methodTable,
-            Map<NId, NClassName> params,
+            LinkedList<VariableInfo> params,
             NClassName returnParam) {
 
         this.methodTable = methodTable;
@@ -43,15 +43,15 @@ public abstract class MethodInfo {
 
         Set<String> paramNameSet = new LinkedHashSet<String>();
 
-        for (Map.Entry<NId, NClassName> id : params.entrySet()) {
-            String name = id.getKey().getText();
+        for (VariableInfo variableInfo : params) {
+            String name = variableInfo.getName();
             if (paramNameSet.contains(name)) {
                 throw new InterpreterException("duplicate parameter " + name,
-                        id.getKey());
+                        variableInfo.getLocation());
             }
             paramNameSet.add(name);
             this.paramNames.add(name);
-            this.params.add(new VariableInfo(name, id.getValue(), id.getKey()));
+            this.params.add(variableInfo);
         }
     }
 

@@ -10,13 +10,13 @@ public class VariableInfo {
 
     private String name;
 
-    private NClassName explicitType;
+    private ClassInfo explicitType;
 
     private Token location;
 
     public VariableInfo(
             String name,
-            NClassName explicitType,
+            ClassInfo explicitType,
             Token location){
 
         this.name = name;
@@ -29,7 +29,7 @@ public class VariableInfo {
         return name;
     }
 
-    public NClassName getExplicitType() {
+    public ClassInfo getExplicitType() {
 
         return explicitType;
     }

@@ -48,7 +48,7 @@ public class PrimitiveOperatorMethodInfo
     PrimitiveOperatorMethodInfo(
             MethodTable methodTable,
             NMember_PrimitiveOperator definition,
-            Map<NId, NClassName> params,
+            LinkedList<VariableInfo> params,
             NClassName returnParam,
             Token operatorToken) {
 

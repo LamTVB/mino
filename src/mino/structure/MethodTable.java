@@ -36,7 +36,7 @@ public class MethodTable {
 
     public void add(
             NMember_Method definition,
-            Map<NId, NClassName> params,
+            LinkedList<VariableInfo> params,
             NClassName returnParam) {
 
         Token nameToken = definition.get_Id();
@@ -53,7 +53,7 @@ public class MethodTable {
 
     public void add(
             NMember_Operator definition,
-            Map<NId, NClassName> params,
+            LinkedList<VariableInfo> params,
             NClassName returnParam,
             Token operatorToken) {
 
@@ -70,7 +70,7 @@ public class MethodTable {
 
     public void add(
             NMember_PrimitiveMethod definition,
-            Map<NId, NClassName> params,
+            LinkedList<VariableInfo> params,
             NClassName returnParam) {
 
         Token nameToken = definition.get_Id();
@@ -87,7 +87,7 @@ public class MethodTable {
 
     public void add(
             NMember_PrimitiveOperator definition,
-            Map<NId, NClassName> params,
+            LinkedList<VariableInfo> params,
             NClassName returnParam,
             Token operatorToken) {
 

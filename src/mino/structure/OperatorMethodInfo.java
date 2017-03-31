@@ -33,7 +33,7 @@ public class OperatorMethodInfo
     OperatorMethodInfo(
             MethodTable methodTable,
             NMember_Operator definition,
-            Map<NId, NClassName> params,
+            LinkedList<VariableInfo> params,
             NClassName returnParam,
             Token operatorToken) {
 

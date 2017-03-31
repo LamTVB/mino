@@ -40,7 +40,7 @@ public class PrimitiveNormalMethodInfo
     PrimitiveNormalMethodInfo(
             MethodTable methodTable,
             NMember_PrimitiveMethod definition,
-            Map<NId, NClassName> params,
+            LinkedList<VariableInfo> params,
             NClassName returnParam) {
 
         super(methodTable, params, returnParam);

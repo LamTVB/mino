@@ -30,7 +30,7 @@ public class NormalMethodInfo
     NormalMethodInfo(
             MethodTable methodTable,
             NMember_Method definition,
-            Map<NId, NClassName> params,
+            LinkedList<VariableInfo> params,
             NClassName returnParam) {
 
         super(methodTable, params, returnParam);

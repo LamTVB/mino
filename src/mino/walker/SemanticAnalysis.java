@@ -145,9 +145,9 @@ public class SemanticAnalysis
 
             ClassInfo next = argsIterator.next();
 
-            if (!next.isa(this.classTable.get(variableInfo.getExplicitType()))) {
+            if (!next.isa(variableInfo.getExplicitType())) {
                 throw new SemanticException("argument #" + i + " is not of "
-                        + variableInfo.getExplicitType().getText() + " type", location);
+                        + variableInfo.getExplicitType().getName() + " type", location);
             }
         }
 
@@ -328,7 +328,7 @@ public class SemanticAnalysis
             NTerm_Var node) {
 
         VariableInfo className = this.currentScope.getVariable(node.get_Id());
-        this.expType = this.classTable.get(className.getExplicitType());
+        this.expType = className.getExplicitType();
     }
 
     @Override
@@ -509,10 +509,10 @@ public class SemanticAnalysis
         if(node.get_ClassNameOpt() instanceof  NClassNameOpt_One){
             NClassName explicitType = ((NClassNameOpt_One)node.get_ClassNameOpt()).get_ClassName();
             left = this.classTable.get(explicitType);
-            this.currentScope.addVariable(new VariableInfo(node.get_Id().getText(), explicitType, node.get_Id()));
+            this.currentScope.addVariable(new VariableInfo(node.get_Id().getText(), left, node.get_Id()));
         }else{
             VariableInfo leftInfo = this.currentScope.getVariable(node.get_Id());
-            left = this.classTable.get(leftInfo.getExplicitType());
+            left = leftInfo.getExplicitType();
         }
 
         if(left.isa(this.integerClassInfo) || left.isa(this.floatClassInfo)){
