@@ -659,11 +659,25 @@ public class SemanticAnalysis
             throw new InterpreterException("left or right cannot be null", node.get_Plus());
         }
 
-        if(left.isa(this.floatClassInfo)
-                && (right.isa(this.floatClassInfo)
-                || right.isa(this.integerClassInfo))){
+        MethodInfo invokedMethod = left.getMethodTable()
+                .getMethodInfo(node.get_Plus());
 
-            this.expType = this.floatClassInfo;
+        if(invokedMethod == null){
+            throw new SemanticException("Function of operator + was not defined on" + left.getName(), node.get_Plus());
+        }
+        if(!right.isa(invokedMethod.getParams().get(0).getExplicitType())){
+            throw new SemanticException("Right argument must be a " + invokedMethod.getParams().get(0).getExplicitType().getName(), node.get_Plus());
+        }
+
+        if(left.isa(this.floatClassInfo)){
+
+            if(right.isa(this.floatClassInfo) || right.isa(this.integerClassInfo)){
+                this.expType = this.floatClassInfo;
+            }else if(right.isa(this.stringClassInfo)){
+                this.expType = this.stringClassInfo;
+            }else{
+                throw new SemanticException("Cannot add " + left.getName() + " with " + right.getName(), node.get_Plus());
+            }
         }else if(left.isa(this.stringClassInfo)
                 && (right.isa(this.stringClassInfo)
                 || right.isa(this.integerClassInfo)
@@ -679,9 +693,13 @@ public class SemanticAnalysis
                 this.expType = this.floatClassInfo;
             }else if(right.isa(this.stringClassInfo)){
                 this.expType = this.stringClassInfo;
+            }else{
+                throw new SemanticException("Cannot add " + left.getName() + " with " + right.getName(), node.get_Plus());
             }
-        }else{
-            throw new SemanticException("Cannot add " + left.getName() + " with " + right.getName(), node.get_Plus());
+        }
+
+        if(invokedMethod.getClassReturnParam() != null && !this.expType.isa(invokedMethod.getClassReturnParam())){
+            throw new SemanticException("Return must be a " + invokedMethod.getClassReturnParam().getName() + " type." , node.get_Plus());
         }
     }
 
@@ -694,6 +712,17 @@ public class SemanticAnalysis
 
         if(left == null || right == null){
             throw new InterpreterException("left or right cannot be null", node.get_Mult());
+        }
+
+        //To keep the primitives functions
+        MethodInfo invokedMethod = left.getMethodTable()
+                .getMethodInfo(node.get_Mult());
+
+        if(invokedMethod == null){
+            throw new SemanticException("Function of operator * was not defined on" + left.getName(), node.get_Mult());
+        }
+        if(!right.isa(invokedMethod.getParams().get(0).getExplicitType())){
+            throw new SemanticException("Right argument must be a " + invokedMethod.getParams().get(0).getExplicitType().getName(), node.get_Mult());
         }
 
         if(left.isa(this.floatClassInfo)
@@ -709,7 +738,11 @@ public class SemanticAnalysis
                 this.expType = this.floatClassInfo;
             }
         }else{
-            throw new SemanticException("Cannot multiply " + left.getName() + " with " + right.getName(), node.get_Mult());
+            throw new SemanticException("Cannot mult " + left.getName() + " with " + right.getName(), node.get_Mult());
+        }
+
+        if(invokedMethod.getClassReturnParam() != null && !this.expType.isa(invokedMethod.getClassReturnParam())){
+            throw new SemanticException("Return must be a " + invokedMethod.getClassReturnParam().getName() + " type." , node.get_Mult());
         }
 
     }
@@ -725,6 +758,17 @@ public class SemanticAnalysis
             throw new InterpreterException("left or right cannot be null", node.get_Modul());
         }
 
+        //To keep the primitives functions
+        MethodInfo invokedMethod = left.getMethodTable()
+                .getMethodInfo(node.get_Modul());
+
+        if(invokedMethod == null){
+            throw new SemanticException("Function of operator % was not defined on" + left.getName(), node.get_Modul());
+        }
+        if(!right.isa(invokedMethod.getParams().get(0).getExplicitType())){
+            throw new SemanticException("Right argument must be a " + invokedMethod.getParams().get(0).getExplicitType().getName(), node.get_Modul());
+        }
+
         if(left.isa(this.floatClassInfo)
                 && (right.isa(this.floatClassInfo)
                 || right.isa(this.integerClassInfo))){
@@ -738,7 +782,11 @@ public class SemanticAnalysis
                 this.expType = this.floatClassInfo;
             }
         }else{
-            throw new SemanticException("Cannot multiply " + left.getName() + " with " + right.getName(), node.get_Modul());
+            throw new SemanticException("Cannot modulo " + left.getName() + " with " + right.getName(), node.get_Modul());
+        }
+
+        if(invokedMethod.getClassReturnParam() != null && !this.expType.isa(invokedMethod.getClassReturnParam())){
+            throw new SemanticException("Return must be a " + invokedMethod.getClassReturnParam().getName() + " type." , node.get_Modul());
         }
     }
 
@@ -753,6 +801,17 @@ public class SemanticAnalysis
             throw new InterpreterException("left or right cannot be null", node.get_Div());
         }
 
+        //To keep the primitives functions
+        MethodInfo invokedMethod = left.getMethodTable()
+                .getMethodInfo(node.get_Div());
+
+        if(invokedMethod == null){
+            throw new SemanticException("Function of operator + was not defined on" + left.getName(), node.get_Div());
+        }
+        if(!right.isa(invokedMethod.getParams().get(0).getExplicitType())){
+            throw new SemanticException("Right argument must be a " + invokedMethod.getParams().get(0).getExplicitType().getName(), node.get_Div());
+        }
+
         if(left.isa(this.floatClassInfo)
                 && (right.isa(this.floatClassInfo)
                 || right.isa(this.integerClassInfo))){
@@ -766,7 +825,50 @@ public class SemanticAnalysis
                 this.expType = this.floatClassInfo;
             }
         }else{
-            throw new SemanticException("Cannot multiply " + left.getName() + " with " + right.getName(), node.get_Div());
+            throw new SemanticException("Cannot div " + left.getName() + " with " + right.getName(), node.get_Div());
+        }
+    }
+
+    @Override
+    public void caseAddExp_Min(
+            NAddExp_Min node) {
+
+        ClassInfo left = getExpType(node.get_AddExp());
+        ClassInfo right = getExpType(node.get_MultExp());
+
+        if(left == null || right == null){
+            throw new InterpreterException("left or right cannot be null", node.get_Min());
+        }
+
+        MethodInfo invokedMethod = left.getMethodTable()
+                .getMethodInfo(node.get_Min());
+
+        if(invokedMethod == null){
+            throw new SemanticException("Function of operator + was not defined on" + left.getName(), node.get_Min());
+        }
+        if(!right.isa(invokedMethod.getParams().get(0).getExplicitType())){
+            throw new SemanticException("Right argument must be a " + invokedMethod.getParams().get(0).getExplicitType().getName(),
+                                node.get_Min());
+        }
+
+        if(left.isa(this.floatClassInfo)
+                && (right.isa(this.floatClassInfo)
+                || right.isa(this.integerClassInfo))){
+
+            this.expType = this.floatClassInfo;
+        }else if(left.isa(this.integerClassInfo)){
+
+            if(right.isa(this.integerClassInfo)){
+                this.expType = this.integerClassInfo;
+            }else if(right.isa(this.floatClassInfo)){
+                this.expType = this.floatClassInfo;
+            }
+        }else{
+            throw new SemanticException("Cannot min " + left.getName() + " with " + right.getName(), node.get_Min());
+        }
+
+        if(invokedMethod.getClassReturnParam() != null && !this.expType.isa(invokedMethod.getClassReturnParam())){
+            throw new SemanticException("Return must be a " + invokedMethod.getClassReturnParam().getName() + " type." , node.get_Min());
         }
     }
 
@@ -808,7 +910,7 @@ public class SemanticAnalysis
                 throw new SemanticException("Required return type : " + methodReturnClassInfo.getName()
                         + ". Given : " + expType.getName(), node.get_ReturnKwd());
             }
-            this.expType = getExpType(exp);
+            this.expType = expType;
         }
     }
 }

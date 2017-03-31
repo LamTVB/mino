@@ -756,20 +756,9 @@ public class InterpreterEngine
         List<NExp> expList = getExpList(node.get_ExpListOpt());
 
         Instance receiver = getExpEval(node.get_RightUnaryExp());
-        if (receiver == null) {
-            throw new InterpreterException("receiver of "
-                    + node.get_Id().getText() + " method is null",
-                    node.get_Id());
-        }
 
         MethodInfo invokedMethod = receiver.getClassInfo().getMethodTable()
                 .getMethodInfo(node.get_Id());
-
-        if (invokedMethod.getParamCount() != expList.size()) {
-            throw new InterpreterException("method " + invokedMethod.getName()
-                    + " expects " + invokedMethod.getParamCount()
-                    + " arguments", node.get_Id());
-        }
 
         Frame frame = new Frame(this.currentFrame, receiver, invokedMethod);
 

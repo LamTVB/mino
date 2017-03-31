@@ -82,17 +82,31 @@ public class MinoInterpreter {
         ClassTable classTable = new ClassTable();
 
         try {
+            //Fill classTable
             ClassFinder.find(syntaxTree, classTable);
+
+            //Fill subtypes of each class
+            SubTypesFinder.print(syntaxTree, classTable);
+
+            //Collect methods and attributes to each class
             ClassDefinitionFinder.find(syntaxTree, classTable);
+
             SemanticAnalysis.verify(syntaxTree, classTable);
-            // interpret
+
+            //Fill virtual tables of each class and print it
             VirtualTablePrinter.print(syntaxTree, classTable);
-//            interpreterEngine.visit(syntaxTree, classTable);
+
+            // interpret
+            interpreterEngine.visit(syntaxTree, classTable);
         }
         catch (InterpreterException e) {
             System.out.flush();
             System.err.println("INTERPRETER ERROR: " + e.getMessage() + ".");
             interpreterEngine.printStackTrace();
+            System.exit(1);
+        }catch(SemanticException e){
+            System.out.flush();
+            System.err.println("SEMANTIC ERROR: " + e.getMessage() + ".");
             System.exit(1);
         }
 

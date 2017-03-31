@@ -62,12 +62,12 @@ class Boolean {
 
 class Integer {
 
-  primitive +(Integer i);
-  primitive *(Integer i);
-  primitive %(Integer i);
-  primitive -(Integer i);
-  primitive to_s();
-  primitive /(Integer i);
+  primitive +(Object i) : Object;
+  primitive *(Object i) : Object;
+  primitive %(Object i) : Object;
+  primitive -(Object i) : Object;
+  primitive to_s() : String;
+  primitive /(Object i) : Object;
 }
 
 class String {
@@ -76,16 +76,16 @@ class String {
     return self;
   }
 
-  primitive +(String s);
+  primitive +(Object s) : Object;
   primitive to_system_out();
 }
 
 class Float{
-    primitive +(Float f);
-    primitive -(Float f);
-    primitive *(Float f);
-    primitive /(Float f);
-    primitive to_s();
+    primitive +(Object f) : Object;
+    primitive -(Object f) : Object;
+    primitive *(Object f) : Object;
+    primitive /(Object f) : Object;
+    primitive to_s() : String;
 }
 
 class A {
@@ -97,6 +97,18 @@ class A {
 class B {
   fun m() {
     print("I'm in class B.");
+  }
+}
+
+class C special A{
+  fun m(){
+    print("I'm in class C");
+  }
+}
+
+class D special A{
+  fun p(){
+    print("I'm in class D");
   }
 }
 
@@ -152,8 +164,6 @@ Float d = a * 2;
 Float e = b / 2;
 Float g = 1.3;
 g = g + 1;
-
-
 
 Person first_person = new Person.init("Jean", 223);
 Person second_person = new Person.init("Pierre", 22);
