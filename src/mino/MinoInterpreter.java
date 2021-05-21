@@ -37,6 +37,7 @@ public class MinoInterpreter {
         }
         else if (args.length == 1) {
             // read from given file
+            System.out.println("TEST");
             try {
                 in = new FileReader(args[0]);
             }
